@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Thirumaran Rajasekaran - 3D Portfolio</title>
   <style>
     body { margin: 0; overflow: hidden; font-family: sans-serif; }
@@ -14,6 +14,7 @@
       background: rgba(0, 0, 0, 0.5);
       padding: 10px;
       border-radius: 8px;
+      z-index: 1;
     }
   </style>
 </head>
@@ -23,13 +24,13 @@
     Explore the 3D world to learn about Thirumaran!
   </div>
 
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.160.1/examples/js/controls/OrbitControls.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.160.1/examples/js/loaders/FontLoader.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.160.1/examples/js/geometries/TextGeometry.js"></script>
+  <!-- Use ES Modules (type="module") -->
+  <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js';
+    import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/controls/OrbitControls.js';
+    import { FontLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/loaders/FontLoader.js';
+    import { TextGeometry } from 'https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/geometries/TextGeometry.js';
 
-  <script>
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x202020);
 
@@ -38,7 +39,7 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    // ✅ FIXED: Use OrbitControls from global scope (no THREE.)
+    // ✅ Correct usage
     const controls = new OrbitControls(camera, renderer.domElement);
 
     const light = new THREE.HemisphereLight(0xffffff, 0x444444);
@@ -61,9 +62,9 @@
     const textMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
 
     function createText(text, x, z) {
-      const loader = new THREE.FontLoader();
+      const loader = new FontLoader();
       loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function (font) {
-        const geometry = new THREE.TextGeometry(text, {
+        const geometry = new TextGeometry(text, {
           font: font,
           size: 0.5,
           height: 0.05
@@ -93,10 +94,4 @@
       if (keys['arrowright'] || keys['d']) car.position.x += 0.1;
 
       controls.update();
-      renderer.render(scene, camera);
-    }
-
-    animate();
-  </script>
-</body>
-</html>
+      renderer.render(scene, camera)
