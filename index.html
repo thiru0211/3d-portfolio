@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Thirumaran Rajasekaran - 3D Portfolio</title>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    canvas { display: block; }
+    #info {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: white;
+      font-family: sans-serif;
+      background: rgba(0,0,0,0.5);
+      padding: 10px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div id="info">
+    Use Arrow Keys or WASD to drive the car<br>
+    Explore the 3D world to learn about Thirumaran!
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.1/examples/js/controls/OrbitControls.js"></script>
+  <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js';
+    import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/loaders/GLTFLoader.js';
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x202020);
+
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+    const light = new THREE.HemisphereLight(0xffffff, 0x444444);
+    light.position.set(0, 200, 0);
+    scene.add(light);
+
+    const ground = new THREE.Mesh(
+      new THREE.PlaneGeometry(200, 200),
+      new THREE.MeshStandardMaterial({ color: 0x333333 })
+    );
+    ground.rotation.x = -Math.PI / 2;
+    scene.add(ground);
+
+    const box = new THREE.Mesh(
+      new THREE.BoxGeometry(1, 1, 2),
+      new THREE.MeshStandardMaterial({ color: 0x00ff88 })
+    );
+    scene.add(box);
+
+    const textMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
+
+    function createTextPanel(text, x, z) {
+      const loader = new THREE.FontLoader();
+      loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function (font) {
+        const textGeometry = new THREE.TextGeometry(text, {
+          font: font,
+          size: 0.5,
+          height: 0.05
+        });
+        const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+        textMesh.position.set(x, 1, z);
+        scene.add(textMesh);
+      });
+    }
+
+    // Add info panels
+    createTextPanel("👨‍💼 Thirumaran Rajasekaran", -5, 5);
+    createTextPanel("🛠️ Java, Selenium, Playwright, Jenkins", 5, -5);
+    createTextPanel("🌐 GitHub: github.com/thiru0211", -5, -5);
+
+    camera.position.set(0, 5, 10);
+
+    const keys = {};
+    document.addEventListener('keydown', e => keys[e.key.toLowerCase()] = true);
+    document.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      if (keys['arrowup'] || keys['w']) box.position.z -= 0.1;
+      if (keys['arrowdown'] || keys['s']) box.position.z += 0.1;
+      if (keys['arrowleft'] || keys['a']) box.position.x -= 0.1;
+      if (keys['arrowright'] || keys['d']) box.position.x += 0.1;
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
