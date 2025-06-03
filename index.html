@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,10 +23,11 @@
     Explore the 3D world to learn about Thirumaran!
   </div>
 
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.160.1/examples/js/controls/OrbitControls.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.160.1/examples/js/loaders/FontLoader.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.160.1/examples/js/geometries/TextGeometry.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.1/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.1/examples/js/loaders/FontLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.1/examples/js/geometries/TextGeometry.js"></script>
 
   <script>
     const scene = new THREE.Scene();
@@ -38,7 +38,8 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    // ✅ FIXED: Use OrbitControls from global scope (no THREE.)
+    const controls = new OrbitControls(camera, renderer.domElement);
 
     const light = new THREE.HemisphereLight(0xffffff, 0x444444);
     light.position.set(0, 200, 0);
