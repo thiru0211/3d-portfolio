@@ -4,10 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>3D Portfolio</title>
+  <link rel="icon" type="image/png" href="https://threejs.org/files/favicon.ico" />
   <style>
     body {
       margin: 0;
       overflow: hidden;
+      background-color: #000;
     }
     canvas {
       display: block;
@@ -34,6 +36,7 @@
     // Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
     document.body.appendChild(renderer.domElement);
 
     // Controls
@@ -46,12 +49,15 @@
     const cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
 
-    // Light
-    const light = new THREE.DirectionalLight(0xffffff, 1);
-    light.position.set(5, 10, 7.5);
-    scene.add(light);
+    // Lighting
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(5, 10, 7.5);
+    scene.add(directionalLight);
 
-    // Animation
+    const ambientLight = new THREE.AmbientLight(0x404040); // soft light
+    scene.add(ambientLight);
+
+    // Animation loop
     function animate() {
       requestAnimationFrame(animate);
       cube.rotation.y += 0.01;
@@ -61,7 +67,7 @@
 
     animate();
 
-    // Resize handling
+    // Handle resizing
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
